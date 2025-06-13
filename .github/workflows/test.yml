@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ main ]
 
+# Run comprehensive tests on all platforms to catch platform-specific issues
+# Coverage is only uploaded from Ubuntu Python 3.11 to avoid conflicts
+
 jobs:
   test:
     runs-on: ${{ matrix.os }}
@@ -32,12 +35,7 @@ jobs:
       run: |
         uv sync --extra dev --extra test
     
-    - name: Run CI test suite (quality checks + unit tests)
-      run: |
-        make ci-test
-    
-    - name: Run comprehensive tests with coverage
-      if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
+    - name: Run comprehensive tests with coverage (all platforms)
       run: |
         make ci-coverage
     
