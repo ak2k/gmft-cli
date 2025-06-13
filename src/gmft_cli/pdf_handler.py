@@ -235,7 +235,8 @@ def list_pdf_backends():
 
     for backend in backends:
         status = "✓ Available" if backend.available else "✗ Not available"
-        print(f"{backend.name:12} {status}")
+        recommended = " (recommended by GMFT)" if backend.name == "pymupdf" else ""
+        print(f"{backend.name:12} {status}{recommended}")
         if not backend.available and backend.error:
             print(f"             Error: {backend.error}")
 
@@ -245,6 +246,9 @@ def list_pdf_backends():
         print(f"\nCurrent backend: {handler.backend_name}")
     except ImportError:
         print("\nNo PDF backend currently available")
+    
+    print("\nNote: GMFT recommends PyMuPDF for best performance and accuracy.")
+    print("      PyMuPDF requires AGPL-3.0 license compliance.")
 
 
 if __name__ == "__main__":

@@ -19,7 +19,7 @@ console = Console()
     "--pdf-backend",
     type=click.Choice(["auto", "pymupdf", "pypdfium2"], case_sensitive=False),
     default="auto",
-    help="PDF backend to use (auto, pymupdf, pypdfium2)",
+    help="PDF backend to use (auto, pymupdf [recommended], pypdfium2)",
     envvar="GMFT_PDF_BACKEND",
 )
 @click.pass_context

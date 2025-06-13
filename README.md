@@ -10,11 +10,11 @@ This CLI automatically discovers and uses all available detectors and formatters
 # Install from source (without PDF backend)
 pip install -e .
 
-# Install with pypdfium2 (recommended)
-pip install -e ".[pdf-pypdfium2]"
-
-# Install with PyMuPDF
+# Install with PyMuPDF (recommended by GMFT for best performance)
 pip install -e ".[pdf-pymupdf]"
+
+# Install with pypdfium2 (lighter alternative)
+pip install -e ".[pdf-pypdfium2]"
 
 # Install with both PDF backends
 pip install -e ".[pdf-all]"
@@ -27,10 +27,12 @@ uv pip install pypdfium2  # or PyMuPDF
 ### PDF Backend Support
 
 GMFT CLI dynamically uses the PDF backends available in your environment:
-- **pypdfium2** (recommended): Lightweight, good performance
-- **PyMuPDF**: More features, larger size
+- **PyMuPDF** (recommended by GMFT): Best performance, accuracy, and advanced line break detection. Requires AGPL-3.0 license compliance.
+- **pypdfium2**: Lighter alternative with good compatibility, but less accurate line detection compared to PyMuPDF.
 
 The CLI will automatically detect and use whichever backend is available. You can also specify which backend to use with the `--pdf-backend` option or the `GMFT_PDF_BACKEND` environment variable.
+
+**Note**: GMFT officially recommends PyMuPDF for optimal performance and accuracy, especially for complex PDFs with intricate line structures. However, pypdfium2 is included as a lighter alternative that doesn't require AGPL license compliance.
 
 ## Usage
 
@@ -60,11 +62,11 @@ gmft-cli list-components
 # Check PDF backend status
 gmft-cli pdf-backends
 
-# Use specific PDF backend
+# Use specific PDF backend (PyMuPDF recommended for best performance)
 gmft-cli --pdf-backend pymupdf extract document.pdf
 
-# Or set via environment variable
-export GMFT_PDF_BACKEND=pypdfium2
+# Or set via environment variable  
+export GMFT_PDF_BACKEND=pymupdf
 gmft-cli extract document.pdf
 
 # Available formats: csv, json, excel, markdown

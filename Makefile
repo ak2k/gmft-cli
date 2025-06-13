@@ -25,10 +25,10 @@ install-dev: ## Install with development dependencies
 install-all: ## Install with all optional dependencies (PDF backends, dev, test)
 	uv sync --extra dev --extra test --extra pdf-all
 
-install-pdf-pymupdf: ## Install with PyMuPDF PDF backend
+install-pdf-pymupdf: ## Install with PyMuPDF PDF backend (recommended by GMFT)
 	uv sync --extra dev --extra test --extra pdf-pymupdf
 
-install-pdf-pypdfium2: ## Install with pypdfium2 PDF backend
+install-pdf-pypdfium2: ## Install with pypdfium2 PDF backend (lighter alternative)
 	uv sync --extra dev --extra test --extra pdf-pypdfium2
 
 # Code quality targets
@@ -248,8 +248,8 @@ info: ## Show project information
 	@echo "  dev          - Development tools (pytest, ruff, black)"
 	@echo "  test         - Testing dependencies (pytest, PyMuPDF for tests)"
 	@echo "  pdf-all      - All PDF backends (PyMuPDF + pypdfium2)"
-	@echo "  pdf-pymupdf  - PyMuPDF backend only"
-	@echo "  pdf-pypdfium2 - pypdfium2 backend only"
+	@echo "  pdf-pymupdf  - PyMuPDF backend (recommended by GMFT for best performance)"
+	@echo "  pdf-pypdfium2 - pypdfium2 backend (lighter alternative)"
 
 # Debug targets
 debug-env: ## Show environment information for debugging
