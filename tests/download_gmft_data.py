@@ -43,9 +43,8 @@ def download_gmft_test_data(target_dir=None, force=False):
         subprocess.run(cmd, check=True)
 
         # Set up sparse checkout for just the data we need
-        os.chdir(target_dir)
-        subprocess.run(["git", "sparse-checkout", "init", "--cone"], check=True)
-        subprocess.run(["git", "sparse-checkout", "set", "data/"], check=True)
+        subprocess.run(["git", "sparse-checkout", "init", "--cone"], check=True, cwd=target_dir)
+        subprocess.run(["git", "sparse-checkout", "set", "data/"], check=True, cwd=target_dir)
 
         print("✓ Successfully downloaded GMFT test data")
         return target_dir
