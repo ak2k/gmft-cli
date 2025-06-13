@@ -1,0 +1,50 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gmft-cli"
+version = "0.1.0"
+description = "Command-line interface for GMFT (General Multi Format Table) detection and extraction"
+authors = [
+    { name = "Your Name", email = "your.email@example.com" }
+]
+requires-python = ">=3.9"
+dependencies = [
+    "gmft @ git+https://github.com/conjuncts/gmft",
+    "click>=8.0",
+    "rich>=10.0",
+    "pillow>=9.0",
+    "openpyxl>=3.0",
+]
+
+[project.scripts]
+gmft-cli = "gmft_cli.cli:main"
+
+[project.optional-dependencies]
+pdf-all = [
+    "PyMuPDF>=1.20.0",
+    "pypdfium2>=4.0.0",
+]
+pdf-pymupdf = [
+    "PyMuPDF>=1.20.0",
+]
+pdf-pypdfium2 = [
+    "pypdfium2>=4.0.0",
+]
+dev = [
+    "pytest>=8.4.0",
+    "pytest-cov>=6.2.1",
+    "pytest-mock>=3.14.1",
+    "ruff>=0.11.13",
+    "black>=22.0",
+]
+test = [
+    "pytest>=8.4.0",
+    "pytest-cov>=6.2.1",
+    "pytest-mock>=3.14.1",
+    "PyMuPDF>=1.20.0",  # For tests
+]
+
+[tool.hatch.metadata]
+allow-direct-references = true
