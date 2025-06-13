@@ -135,3 +135,55 @@ class TestPDFBackendIntegration:
         handler = PDFHandler(backend=backend)
         assert handler.backend_name == backend
         assert handler.is_available
+
+    @pytest.mark.parametrize("backend", ["pypdfium2", "pymupdf"])
+    def test_pdf_processing_with_backend(self, backend, sample_pdf):
+        """Test PDF processing works correctly with specific backend."""
+        # Check if backend is available
+        backends = PDFHandler.check_available_backends()
+        backend_info = next((b for b in backends if b.name == backend), None)
+
+        if not backend_info or not backend_info.available:
+            pytest.skip(f"{backend} not available")
+
+        # Create handler with specific backend
+        handler = PDFHandler(backend=backend)
+        
+        # Test basic PDF operations
+        page_count = handler.get_page_count(sample_pdf)
+        assert isinstance(page_count, int)
+        assert page_count > 0
+
+        # Test document opening
+        doc = handler.open_document(sample_pdf)
+        assert doc is not None
+        assert len(doc) > 0
+        doc.close()
+
+    @pytest.mark.parametrize("backend", ["pypdfium2", "pymupdf"])
+    def test_cli_with_specific_backend(self, backend, sample_pdf, cli_runner):
+        """Test CLI functionality with specific PDF backend."""
+        # Check if backend is available
+        backends = PDFHandler.check_available_backends()
+        backend_info = next((b for b in backends if b.name == backend), None)
+
+        if not backend_info or not backend_info.available:
+            pytest.skip(f"{backend} not available")
+
+        # Test CLI detect command with specific backend
+        from gmft_cli.cli import cli
+        result = cli_runner.invoke(
+            cli, 
+            ["--pdf-backend", backend, "detect", str(sample_pdf)]
+        )
+        
+        # Should not fail due to backend issues
+        assert result.exit_code == 0 or "No tables detected" in result.output
+
+    def test_backend_recommendation_display(self, capsys):
+        """Test that PyMuPDF is shown as recommended in backend list."""
+        list_pdf_backends()
+        
+        captured = capsys.readouterr()
+        assert "recommended by GMFT" in captured.out
+        assert "PyMuPDF requires AGPL-3.0 license compliance" in captured.out

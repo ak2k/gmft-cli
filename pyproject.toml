@@ -48,3 +48,12 @@ test = [
 
 [tool.hatch.metadata]
 allow-direct-references = true
+
+[tool.uv.sources]
+gmft-pymupdf = { git = "https://github.com/conjuncts/gmft_pymupdf.git" }
+
+[dependency-groups]
+dev = [
+    "gmft-pymupdf",
+    "pymupdf>=1.26.1",
+]

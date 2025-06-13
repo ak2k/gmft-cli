@@ -37,8 +37,8 @@ class PDFHandler:
             # User specified a backend
             backends_to_try = [self.backend]
         else:
-            # Try in GMFT's preferred order
-            backends_to_try = ["pypdfium2", "pymupdf"]
+            # Try in GMFT's preferred order (PyMuPDF recommended)
+            backends_to_try = ["pymupdf", "pypdfium2"]
 
         errors = {}
 
@@ -55,12 +55,12 @@ class PDFHandler:
                     )
                     return
                 elif backend_name == "pymupdf":
-                    from gmft.pdf_bindings import PyMuPDFDocument
+                    from gmft_pymupdf import PyMuPDFDocument
 
                     self._document_class = PyMuPDFDocument
                     self._backend_info = PDFBackendInfo(
                         name="pymupdf",
-                        module="gmft.pdf_bindings.PyMuPDFDocument",
+                        module="gmft_pymupdf.PyMuPDFDocument",
                         available=True,
                     )
                     return
@@ -181,14 +181,14 @@ class PDFHandler:
 
         # Check PyMuPDF
         try:
-            from gmft.pdf_bindings import PyMuPDFDocument
+            from gmft_pymupdf import PyMuPDFDocument
 
             # Verify the class is usable
             _ = PyMuPDFDocument
             backends.append(
                 PDFBackendInfo(
                     name="pymupdf",
-                    module="gmft.pdf_bindings.PyMuPDFDocument",
+                    module="gmft_pymupdf.PyMuPDFDocument",
                     available=True,
                 )
             )
@@ -196,7 +196,7 @@ class PDFHandler:
             backends.append(
                 PDFBackendInfo(
                     name="pymupdf",
-                    module="gmft.pdf_bindings.PyMuPDFDocument",
+                    module="gmft_pymupdf.PyMuPDFDocument",
                     available=False,
                     error=str(e),
                 )
@@ -226,7 +226,7 @@ def get_pdf_handler(backend: Optional[str] = None) -> PDFHandler:
     return _pdf_handler
 
 
-def list_pdf_backends():
+def list_pdf_backends(preferred_backend: Optional[str] = None):
     """List available PDF backends with their status."""
     backends = PDFHandler.check_available_backends()
 
@@ -242,8 +242,13 @@ def list_pdf_backends():
 
     # Show current backend
     try:
-        handler = get_pdf_handler()
-        print(f"\nCurrent backend: {handler.backend_name}")
+        if preferred_backend:
+            # Create handler with specific backend to show what would be used
+            handler = PDFHandler(backend=preferred_backend)
+            print(f"\nCurrent backend: {handler.backend_name}")
+        else:
+            handler = get_pdf_handler()
+            print(f"\nCurrent backend: {handler.backend_name}")
     except ImportError:
         print("\nNo PDF backend currently available")
     

@@ -808,11 +808,14 @@ def detect_image_tables(input_file: Path, detector):
 
 
 @cli.command()
-def pdf_backends():
+@click.pass_context
+def pdf_backends(ctx):
     """Show available PDF backends and their status."""
     from .pdf_handler import list_pdf_backends
 
-    list_pdf_backends()
+    # Get PDF backend preference from context
+    pdf_backend = ctx.obj.get("pdf_backend") if ctx.obj else None
+    list_pdf_backends(preferred_backend=pdf_backend)
 
 
 @cli.command()
