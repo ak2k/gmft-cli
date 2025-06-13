@@ -8,7 +8,7 @@ from pathlib import Path
 import shutil
 
 
-def download_gmft_test_data(target_dir=None):
+def download_gmft_test_data(target_dir=None, force=False):
     """Download GMFT repository to get test data."""
     if target_dir is None:
         # Default to parent directory
@@ -18,9 +18,11 @@ def download_gmft_test_data(target_dir=None):
 
     if target_dir.exists():
         print(f"GMFT source already exists at: {target_dir}")
-        response = input("Remove and re-download? (y/N): ")
-        if response.lower() != "y":
-            return target_dir
+        if not force:
+            response = input("Remove and re-download? (y/N): ")
+            if response.lower() != "y":
+                return target_dir
+        print("Removing existing directory...")
         shutil.rmtree(target_dir)
 
     print(f"Cloning GMFT repository to: {target_dir}")
@@ -80,6 +82,9 @@ def main():
     parser.add_argument(
         "--check", action="store_true", help="Just check if data exists"
     )
+    parser.add_argument(
+        "--force", action="store_true", help="Force download without confirmation"
+    )
 
     args = parser.parse_args()
 
@@ -87,7 +92,7 @@ def main():
         path = check_gmft_data()
         sys.exit(0 if path else 1)
     else:
-        path = download_gmft_test_data(args.target)
+        path = download_gmft_test_data(args.target, force=args.force)
         if path:
             print("\nTo run GMFT data tests:")
             print("  pytest tests/test_gmft_integration.py -m gmft_data")

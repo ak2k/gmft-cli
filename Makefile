@@ -87,7 +87,7 @@ test-specific: ## Run specific test file (usage: make test-specific FILE=test_ex
 
 # GMFT test data management
 download-data: ## Download GMFT test data for integration tests
-	uv run python tests/download_gmft_data.py
+	uv run python tests/download_gmft_data.py --force
 
 check-data: ## Check if GMFT test data is available
 	uv run python tests/download_gmft_data.py --check
