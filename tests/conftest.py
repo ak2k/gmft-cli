@@ -361,6 +361,9 @@ def get_gmft_source_path():
     """Get path to GMFT source directory."""
     # Try to find GMFT source in various locations
     possible_paths = [
+        # Same path as download script uses
+        Path(__file__).parent.parent.parent / "gmft-source",
+        # Alternative locations  
         Path(__file__).parent.parent.parent.parent / "gmft-source",
         Path(__file__).parent.parent.parent.parent.parent / "gmft-source",
         Path.home() / "Downloads" / "gmft-source",
