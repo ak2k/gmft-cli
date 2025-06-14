@@ -42,14 +42,23 @@ jobs:
     
     - name: Run comprehensive tests with coverage (all platforms)
       run: |
-        make ci-coverage
+        echo "=== Starting Test Run for ${{ matrix.os }} Python ${{ matrix.python-version }} ==="
+        make ci-coverage 2>&1 | tee test_output.log
+        echo "=== Test Run Complete ==="
     
-    - name: Report test summary
+    - name: Report test summary and skips
       if: always()
       run: |
-        echo "=== Test Summary for ${{ matrix.os }} Python ${{ matrix.python-version }} ==="
-        # Re-run tests with summary to show skips without coverage overhead
-        uv run python -m pytest tests/ -v --tb=short -q --disable-warnings | grep -E "(PASSED|FAILED|SKIPPED|ERROR)" | sort | uniq -c || true
+        echo ""
+        echo "=== TEST SUMMARY for ${{ matrix.os }} Python ${{ matrix.python-version }} ==="
+        echo "=================================================================="
+        # Extract the final test result line
+        grep -E "=+ .* (passed|failed|skipped|error)" test_output.log | tail -1 || echo "Could not parse test results"
+        echo ""
+        # Show any skipped tests with reasons
+        echo "Skip Analysis:"
+        grep -E "SKIP|PASSED.*\[.*%\]|FAILED.*\[.*%\]" test_output.log | grep "SKIP" || echo "✓ No tests were skipped"
+        echo "=================================================================="
     
     - name: Upload coverage to Codecov
       if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
