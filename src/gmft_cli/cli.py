@@ -359,7 +359,7 @@ def process_pdf(
                     progress.update(task, advance=1)
 
             console.print(
-                f"[green]✓[/green] Extracted {table_count} tables from {len(page_list)} pages"
+                f"[green]Extracted {table_count} tables from {len(page_list)} pages[/green]"
             )
 
         finally:
@@ -443,7 +443,7 @@ def process_image(
         filename = f"{input_file.stem}_table_{idx + 1}"
         save_table(formatted_table, output_dir, filename, format, caption=caption)
 
-    console.print(f"[green]✓[/green] Extracted {len(tables)} tables")
+    console.print(f"[green]Extracted {len(tables)} tables[/green]")
 
 
 def save_table(
@@ -686,7 +686,7 @@ def bulk_extract(
             progress.update(task, advance=1)
 
     console.print(
-        f"\n[green]✓[/green] Extracted {total_tables} tables from {len(files_to_process)} files"
+        f"\n[green]Extracted {total_tables} tables from {len(files_to_process)} files[/green]"
     )
     console.print(f"[green]Output saved to:[/green] {output}")
 
@@ -851,7 +851,7 @@ def list_components():
         formatter_table.add_row(
             name,
             info.module_path,
-            "✓" if info.config_class else "✗",
+            "Yes" if info.config_class else "No",
             info.description or "No description available",
         )
 

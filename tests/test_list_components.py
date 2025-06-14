@@ -41,7 +41,7 @@ class TestListComponentsCommand:
         assert result.exit_code == 0
         # Should show config support indicators
         assert "Has Config" in result.output
-        assert "✓" in result.output or "✗" in result.output
+        assert "Yes" in result.output or "No" in result.output
 
     @pytest.mark.usefixtures("mock_gmft_components")
     def test_list_components_shows_descriptions(self, cli_runner):

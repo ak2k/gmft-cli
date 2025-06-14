@@ -46,11 +46,11 @@ def download_gmft_test_data(target_dir=None, force=False):
         subprocess.run(["git", "sparse-checkout", "init", "--cone"], check=True, cwd=target_dir)
         subprocess.run(["git", "sparse-checkout", "set", "data/"], check=True, cwd=target_dir)
 
-        print("✓ Successfully downloaded GMFT test data")
+        print("Successfully downloaded GMFT test data")
         return target_dir
 
     except subprocess.CalledProcessError as e:
-        print(f"✗ Failed to download GMFT data: {e}")
+        print(f"Failed to download GMFT data: {e}")
         return None
 
 
@@ -63,10 +63,10 @@ def check_gmft_data():
 
     for path in possible_paths:
         if path.exists() and (path / "data" / "pdfs").exists():
-            print(f"✓ GMFT test data found at: {path}")
+            print(f"GMFT test data found at: {path}")
             return path
 
-    print("✗ GMFT test data not found")
+    print("GMFT test data not found")
     return None
 
 

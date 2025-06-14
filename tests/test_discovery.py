@@ -188,7 +188,6 @@ class TestDynamicDiscovery:
         desc = registry._get_class_description(TestClass)
         assert desc is None
 
-    @pytest.mark.skipif(True, reason="Requires actual GMFT installation")
     def test_real_gmft_discovery(self):
         """Test discovery with actual GMFT installation."""
         registry = ComponentRegistry()

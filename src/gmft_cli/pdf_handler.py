@@ -234,7 +234,7 @@ def list_pdf_backends(preferred_backend: Optional[str] = None):
     print("-" * 50)
 
     for backend in backends:
-        status = "✓ Available" if backend.available else "✗ Not available"
+        status = "Available" if backend.available else "Not available"
         recommended = " (recommended by GMFT)" if backend.name == "pymupdf" else ""
         print(f"{backend.name:12} {status}{recommended}")
         if not backend.available and backend.error:
