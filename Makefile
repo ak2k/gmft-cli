@@ -193,10 +193,33 @@ ci-test: ## Run tests optimized for CI environments
 	@echo "\n✅ CI tests complete!"
 
 ci-coverage: ## Run comprehensive tests with coverage for CI
-	@echo "📊 Running CI coverage test suite..."
-	@echo "===================================="
-	@make test-comprehensive
-	@echo "✅ CI coverage tests complete!"
+	@echo "Running CI coverage test suite..."
+	@echo "=================================="
+	uv run python -m pytest tests/ -v --cov=gmft_cli --cov-report=term-missing --cov-report=html --cov-report=xml --tb=short
+	@echo ""
+	@echo "CI coverage tests complete!"
+
+test-skip-analysis: ## Analyze which tests get skipped and why
+	@echo "Test Skip Analysis"
+	@echo "=================="
+	@echo "Total tests collected:"
+	@uv run python -m pytest tests/ --collect-only -q | grep "tests collected" || echo "Error collecting tests"
+	@echo ""
+	@echo "Tests by category:"
+	@echo "- Unit tests (no markers):"
+	@uv run python -m pytest tests/ --collect-only -q -m "not integration and not gmft_data and not validation" | grep "tests collected" || echo "0 tests"
+	@echo "- Integration tests:"
+	@uv run python -m pytest tests/ --collect-only -q -m "integration" | grep "tests collected" || echo "0 tests"
+	@echo "- GMFT data tests:"
+	@uv run python -m pytest tests/ --collect-only -q -m "gmft_data" | grep "tests collected" || echo "0 tests"
+	@echo "- Validation tests:"
+	@uv run python -m pytest tests/ --collect-only -q -m "validation" | grep "tests collected" || echo "0 tests"
+	@echo ""
+	@echo "Test execution summary:"
+	@uv run python -m pytest tests/ -v --tb=line 2>/dev/null | grep -E "(PASSED|FAILED|SKIPPED|ERROR)" | cut -d' ' -f2- | sort | uniq -c
+	@echo ""
+	@echo "Skip reasons (if any):"
+	@uv run python -m pytest tests/ -rs --tb=no 2>/dev/null | grep -A1 "SKIPPED" || echo "No skipped tests found"
 
 # Help for common workflows
 workflow-help: ## Show common development workflows

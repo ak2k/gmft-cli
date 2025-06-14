@@ -44,6 +44,13 @@ jobs:
       run: |
         make ci-coverage
     
+    - name: Report test summary
+      if: always()
+      run: |
+        echo "=== Test Summary for ${{ matrix.os }} Python ${{ matrix.python-version }} ==="
+        # Re-run tests with summary to show skips without coverage overhead
+        uv run python -m pytest tests/ -v --tb=short -q --disable-warnings | grep -E "(PASSED|FAILED|SKIPPED|ERROR)" | sort | uniq -c || true
+    
     - name: Upload coverage to Codecov
       if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
       uses: codecov/codecov-action@v4
